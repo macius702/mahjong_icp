@@ -1,0 +1,3 @@
+[submodule "src/mahjong_icp_frontend"]
+	path = src/mahjong_icp_frontend
+	url = git@github.com:macius702/ED-Mahjong-flutter.git
