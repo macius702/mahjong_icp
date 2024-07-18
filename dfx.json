@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "mahjong_icp_backend": {
+      "candid": "src/mahjong_icp_backend/mahjong_icp_backend.did",
+      "package": "mahjong_icp_backend",
+      "type": "rust"
+    },
+    "mahjong_icp_frontend": {
+      "dependencies": [
+        "mahjong_icp_backend"
+      ],
+      "source": [
+        "src/mahjong_icp_frontend/assets"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
