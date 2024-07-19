@@ -10,7 +10,7 @@
         "mahjong_icp_backend"
       ],
       "source": [
-        "src/mahjong_icp_frontend/assets"
+        "src/mahjong_icp_frontend/build/web"
       ],
       "type": "assets"
     }
