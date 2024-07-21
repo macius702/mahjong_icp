@@ -1,3 +1,4 @@
 service : {
-    "greet": (text) -> (text) query;
+  get_times : () -> (vec record { text; nat64 }) query;
+  set_time : (text, nat64) -> ();
 }

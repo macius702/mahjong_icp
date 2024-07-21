@@ -3,7 +3,9 @@
     "mahjong_icp_backend": {
       "candid": "src/mahjong_icp_backend/mahjong_icp_backend.did",
       "package": "mahjong_icp_backend",
-      "type": "rust"
+      "type": "custom",
+      "build": "./scripts/backend_build.sh mahjong_icp_backend",
+      "wasm": "target/wasm32-unknown-unknown/release/mahjong_icp_backend.wasm"
     },
     "mahjong_icp_frontend": {
       "dependencies": [
