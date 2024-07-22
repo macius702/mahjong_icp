@@ -7,6 +7,9 @@ use candid::{CandidType};
 
 use serde::Deserialize;
 
+use std::collections::BinaryHeap;
+use std::cmp::Reverse;
+
 
 thread_local! {
     static STATE: RefCell<State> = RefCell::new(State::default());
@@ -15,57 +18,70 @@ thread_local! {
 #[derive(Default)]
 pub struct State {
     // a list of  user leaderboards for each board setup
-    pub leaderboards: HashMap<String, Score>,
+    pub leaderboards: HashMap<String, Leaderboard>,
 }
 
-//Leaderboard is a struct containing best scores for a given board setup
+//Leaderboard is a collection containing best scores for a given board setup
  
-// #[derive(Default, Clone)]
-// pub struct Leaderboard {
-//     pub score: Score,
-// }
+#[derive(Default, Clone)]
+pub struct Leaderboard {
+    pub scores: BinaryHeap<(Reverse<u32>, String)>,
+}
 
 // //Score contains the user name and the score . The score is the shortest time in miliseconds of the user to solve the board
-// #[derive(Default, CandidType, Clone, Deserialize)]
-// pub struct Score {
-//     //pub user: String,
-//     pub miliseconds : u64,
-// }
+#[derive(Default, CandidType, Clone, Deserialize, Debug)]
+pub struct Score {
+    pub user: String,
+    pub miliseconds : u32,
+}
 
-type Score = u32;
 
-// abstract class IHighscoreDB {
-//     Future<Map<String, int>> getTimes();
-//     Future<void> set(String layout, int time);
-//   }
 
 
 #[ic_cdk_macros::query]
-pub fn get_times() -> HashMap<String, Score> {
+pub fn get_times() -> HashMap<String, u32> {
     ic_cdk::println!("get_times: Function called");
+    
 
-    let result = STATE.with(|state| {
+    //take from every leaderboard only the first score (if any)
+    // and make an entry of it - leaderbord name, miliseconds
+    // then pack them into a Hashmap
+
+    let mut result = HashMap::new();
+    STATE.with(|state| {
         let state = state.borrow();
-        ic_cdk::println!("get_times: State borrowed");
-        state.leaderboards.clone()
+        for (board_setup, leaderboard) in state.leaderboards.iter() {
+            ic_cdk::println!("get_times: Iterating over leaderboards with board_setup: {}", board_setup);
+            if let Some((Reverse(miliseconds), _)) = leaderboard.scores.peek() {
+                ic_cdk::println!("get_times: Found score for board_setup: {}, miliseconds: {}", board_setup, miliseconds);
+                result.insert(board_setup.clone(), *miliseconds);
+            }
+            ic_cdk::println!("get_times: Iteration done");
+        }
     });
+    ic_cdk::println!("get_times: Function done returning {:?}", result);
 
-    ic_cdk::println!("get_times: Result - {:?}", result);
     result
+    
 }
 
 
 #[ic_cdk_macros::update]
-pub fn set_time(board_setup: String, score: Score) {
-    ic_cdk::println!("set_time: Function called with board_setup: {} and score: {:?}", board_setup, score);
+pub fn set_time(board_setup: String, miliseconds: u32) {
+    //dummy user
+    let user = "Ala".to_string();
+    ic_cdk::println!("set_time: Function called with board_setup: {}, miliseconds: {}, user: {}", board_setup, miliseconds, user);
+
 
     STATE.with(|state| {
         let mut state = state.borrow_mut();
         ic_cdk::println!("set_time: State borrowed");
-        let a_score = state.leaderboards.entry(board_setup.clone()).or_insert(Score::default());
-        ic_cdk::println!("set_time: Current score for {}: {:?}", board_setup, a_score);
-        *a_score = score; // Dereference a_score before assigning
-        ic_cdk::println!("set_time: New score for {}: {:?}", board_setup, a_score);
+        let leaderboard = state.leaderboards.entry(board_setup).or_insert(Leaderboard { scores: BinaryHeap::new() });
+        ic_cdk::println!("set_time: Leaderboard entry created");
+
+        // Push the score into the heap
+        leaderboard.scores.push((Reverse(miliseconds), user.clone()));
+        ic_cdk::println!("set_time: Score pushed");
     })
 }
 
