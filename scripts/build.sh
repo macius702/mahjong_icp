@@ -45,6 +45,8 @@ else
 fi
 
 dart format $ROOT_DIRECTORY/src/mahjong_icp_frontend/lib/engine/*.dart
+dart format $ROOT_DIRECTORY/src/mahjong_icp_frontend/lib/screens/*.dart
+dart format $ROOT_DIRECTORY/src/mahjong_icp_frontend/lib/widgets/*.dart
 # dart format --line-length 120 src/mahjong_icp_frontend/lib/*.dart
 
 # dfx stop
@@ -53,9 +55,10 @@ dfx start --clean --background &
 # flutter clean
 # flutter pub get
 
-# echo "Running canister create with parameter: $deploy_param"
-# dfx canister create d_backend $deploy_param
-# dfx canister create d_frontend $deploy_param
+# # echo "Running canister create with parameter: $deploy_param"
+# dfx deploy mahjong_icp_backend
+# # dfx canister create d_backend $deploy_param
+# # dfx canister create d_frontend $deploy_param
 
 echo "Running dart generate_config.dart with parameter: $mode"
 dart $ROOT_DIRECTORY/scripts/generate_config.dart $mode
@@ -64,6 +67,6 @@ pushd $ROOT_DIRECTORY/src/mahjong_icp_frontend
 flutter build web --profile --dart-define=Dart2jsOptimization=O0 --source-maps
 sed -i 's|<base href="/ED-Mahjong/">|<base href="">|g' build/web/index.html
 popd
-dfx deploy
+dfx deploy 
 
 # flutter run -d chrome

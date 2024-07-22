@@ -23,7 +23,7 @@ pub struct State {
 
 //Leaderboard is a collection containing best scores for a given board setup
  
-#[derive(Default, Clone, Debug)]
+#[derive(Default, CandidType, Clone, Debug)]
 pub struct Leaderboard {
     pub scores: BinaryHeap<(Reverse<u32>, String)>,
 }
@@ -36,10 +36,28 @@ pub struct Score {
 }
 
 
+#[ic_cdk_macros::query]
+pub fn get_times_by_board(board_setup : String) -> Leaderboard
+{
+    ic_cdk::println!("get_times_by_board: Function called with board_setup: {}", board_setup);
 
+    let mut result = Leaderboard::default();
+    STATE.with(|state| {
+        let state = state.borrow();
+        ic_cdk::println!("get_times_by_board: State borrowed");
+        if let Some(leaderboard) = state.leaderboards.get(&board_setup) {
+            ic_cdk::println!("get_times_by_board: Found leaderboard for board_setup: {}", board_setup);
+            result = leaderboard.clone();
+        }
+    });
+
+    ic_cdk::println!("get_times_by_board: Function done returning {:?}", result);
+
+    result
+}
 
 #[ic_cdk_macros::query]
-pub fn get_times() -> HashMap<String, u32> {
+pub fn get_times() -> HashMap<String, u32> { // gets one time of each board
     ic_cdk::println!("get_times: Function called");
     
 
@@ -60,10 +78,19 @@ pub fn get_times() -> HashMap<String, u32> {
         }
     });
 
-    //only print full STATE
+    //only print full STATE - mtlk todo printing into separate function
     STATE.with(|state| {
        let state = state.borrow();
-       ic_cdk::println!("get_times: Full state: {:?}", state);
+//iterate over leaderboards and print them separately
+        for (board_setup, leaderboard) in state.leaderboards.iter() {
+            ic_cdk::println!("board_setup: {}", board_setup);
+            for (Reverse(miliseconds), user) in leaderboard.scores.iter() {
+                ic_cdk::println!("    miliseconds: {}, user: {}", miliseconds, user);
+            }
+        }
+
+
+       //ic_cdk::println!("get_times: Full state: {:?}", state);
     });
 
 
