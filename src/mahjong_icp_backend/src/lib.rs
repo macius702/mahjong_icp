@@ -15,7 +15,7 @@ thread_local! {
     static STATE: RefCell<State> = RefCell::new(State::default());
 }
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct State {
     // a list of  user leaderboards for each board setup
     pub leaderboards: HashMap<String, Leaderboard>,
@@ -23,7 +23,7 @@ pub struct State {
 
 //Leaderboard is a collection containing best scores for a given board setup
  
-#[derive(Default, Clone)]
+#[derive(Default, Clone, Debug)]
 pub struct Leaderboard {
     pub scores: BinaryHeap<(Reverse<u32>, String)>,
 }
@@ -59,6 +59,17 @@ pub fn get_times() -> HashMap<String, u32> {
             ic_cdk::println!("get_times: Iteration done");
         }
     });
+
+    //only print full STATE
+    STATE.with(|state| {
+       let state = state.borrow();
+       ic_cdk::println!("get_times: Full state: {:?}", state);
+    });
+
+
+
+
+
     ic_cdk::println!("get_times: Function done returning {:?}", result);
 
     result
@@ -67,9 +78,7 @@ pub fn get_times() -> HashMap<String, u32> {
 
 
 #[ic_cdk_macros::update]
-pub fn set_time(board_setup: String, miliseconds: u32) {
-    //dummy user
-    let user = "Ala".to_string();
+pub fn set_time(board_setup: String, miliseconds: u32, user: String) {
     ic_cdk::println!("set_time: Function called with board_setup: {}, miliseconds: {}, user: {}", board_setup, miliseconds, user);
 
 

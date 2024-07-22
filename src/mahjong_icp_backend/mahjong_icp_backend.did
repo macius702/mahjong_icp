@@ -1,5 +1,5 @@
 service : {
   debug_delete_all_data : () -> ();
   get_times : () -> (vec record { text; nat32 }) query;
-  set_time : (text, nat32) -> ();
+  set_time : (text, nat32, text) -> ();
 }
