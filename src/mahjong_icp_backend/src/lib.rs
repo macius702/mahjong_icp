@@ -32,7 +32,7 @@ pub struct State {
 //     pub miliseconds : u64,
 // }
 
-type Score = u64;
+type Score = u32;
 
 // abstract class IHighscoreDB {
 //     Future<Map<String, int>> getTimes();
@@ -68,4 +68,18 @@ pub fn set_time(board_setup: String, score: Score) {
         ic_cdk::println!("set_time: New score for {}: {:?}", board_setup, a_score);
     })
 }
+
+#[ic_cdk_macros::update]
+pub fn debug_delete_all_data() {
+    ic_cdk::println!("debug_delete_all_data: Function called");
+
+    STATE.with(|state| {
+        let mut state = state.borrow_mut();
+        ic_cdk::println!("debug_delete_all_data: State borrowed");
+        state.leaderboards.clear();
+        ic_cdk::println!("debug_delete_all_data: State cleared");
+    })
+}
+
+
 ic_cdk::export_candid!();
