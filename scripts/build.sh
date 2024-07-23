@@ -49,6 +49,8 @@ dart format $ROOT_DIRECTORY/src/mahjong_icp_frontend/lib/screens/*.dart
 dart format $ROOT_DIRECTORY/src/mahjong_icp_frontend/lib/widgets/*.dart
 # dart format --line-length 120 src/mahjong_icp_frontend/lib/*.dart
 
+(cd $ROOT_DIRECTORY/src && cargo fmt)
+
 # dfx stop
 dfx start --clean --background &
 # dfx start --background &
