@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ex
+set -e
 CANISTERS="$1"
 
 function generate_did() {
