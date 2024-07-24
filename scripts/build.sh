@@ -80,6 +80,7 @@ then
     flutter run --release -d emulator-5554 &
 elif [ "$mode" == "local" ]
 then
+    echo
     # flutter run -d chrome
 fi
 
