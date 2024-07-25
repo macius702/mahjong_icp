@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+
 
 dfx stop
 killall replica dfx icx-proxy
