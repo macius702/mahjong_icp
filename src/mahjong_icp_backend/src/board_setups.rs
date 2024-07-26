@@ -1,6 +1,6 @@
 
 
-const BOARD_SETUPS: [&str; 72] = [
+const BOARD_LAYOUTS: [&str; 72] = [
 "4_winds",
 "alien",
 "altar",

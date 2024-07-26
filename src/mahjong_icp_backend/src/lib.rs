@@ -15,11 +15,11 @@ thread_local! {
 
 #[derive(Default, Debug)]
 pub struct State {
-    // a list of  user leaderboards for each board setup
+    // a list of  user leaderboards for each board layout
     pub leaderboards: HashMap<String, Leaderboard>,
 }
 
-//Leaderboard is a collection containing best scores for a given board setup
+//Leaderboard is a collection containing best scores for a given board layout
 
 #[derive(Default, CandidType, Clone, Debug)]
 pub struct Leaderboard {
@@ -34,20 +34,20 @@ pub struct Score {
 }
 
 #[ic_cdk_macros::query]
-pub fn get_times_by_board(board_setup: String) -> Leaderboard {
+pub fn get_times_by_board(board_layout: String) -> Leaderboard {
     ic_cdk::println!(
-        "get_times_by_board: Function called with board_setup: {}",
-        board_setup
+        "get_times_by_board: Function called with board_layout: {}",
+        board_layout
     );
 
     let mut result = Leaderboard::default();
     STATE.with(|state| {
         let state = state.borrow();
         ic_cdk::println!("get_times_by_board: State borrowed");
-        if let Some(leaderboard) = state.leaderboards.get(&board_setup) {
+        if let Some(leaderboard) = state.leaderboards.get(&board_layout) {
             ic_cdk::println!(
-                "get_times_by_board: Found leaderboard for board_setup: {}",
-                board_setup
+                "get_times_by_board: Found leaderboard for board_layout: {}",
+                board_layout
             );
             result = leaderboard.clone();
         }
@@ -65,18 +65,18 @@ pub fn get_times() -> HashMap<String, u32> {
     let mut result = HashMap::new();
     STATE.with(|state| {
         let state = state.borrow();
-        for (board_setup, leaderboard) in state.leaderboards.iter() {
+        for (board_layout, leaderboard) in state.leaderboards.iter() {
             ic_cdk::println!(
-                "get_times: Iterating over leaderboards with board_setup: {}",
-                board_setup
+                "get_times: Iterating over leaderboards with board_layout: {}",
+                board_layout
             );
             if let Some((&miliseconds, _)) = leaderboard.scores.iter().next() {
                 ic_cdk::println!(
-                    "get_times: Found score for board_setup: {}, miliseconds: {}",
-                    board_setup,
+                    "get_times: Found score for board_layout: {}, miliseconds: {}",
+                    board_layout,
                     miliseconds
                 );
-                result.insert(board_setup.clone(), miliseconds);
+                result.insert(board_layout.clone(), miliseconds);
             }
             ic_cdk::println!("get_times: Iteration done");
         }
@@ -84,8 +84,8 @@ pub fn get_times() -> HashMap<String, u32> {
 
     STATE.with(|state| {
         let state = state.borrow();
-        for (board_setup, leaderboard) in state.leaderboards.iter() {
-            ic_cdk::println!("board_setup: {}", board_setup);
+        for (board_layout, leaderboard) in state.leaderboards.iter() {
+            ic_cdk::println!("board_layout: {}", board_layout);
             for (&miliseconds, user) in leaderboard.scores.iter() {
                 ic_cdk::println!("    miliseconds: {}, user: {}", miliseconds, user);
             }
@@ -98,10 +98,10 @@ pub fn get_times() -> HashMap<String, u32> {
 }
 
 #[ic_cdk_macros::update]
-pub fn set_time(board_setup: String, miliseconds: u32, user: String) {
+pub fn set_time(board_layout: String, miliseconds: u32, user: String) {
     ic_cdk::println!(
-        "set_time: Function called with board_setup: {}, miliseconds: {}, user: {}",
-        board_setup,
+        "set_time: Function called with board_layout: {}, miliseconds: {}, user: {}",
+        board_layout,
         miliseconds,
         user
     );
@@ -111,7 +111,7 @@ pub fn set_time(board_setup: String, miliseconds: u32, user: String) {
         ic_cdk::println!("set_time: State borrowed");
         let leaderboard = state
             .leaderboards
-            .entry(board_setup)
+            .entry(board_layout)
             .or_insert(Leaderboard {
                 scores: BTreeMap::new(),
             });
