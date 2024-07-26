@@ -64,7 +64,13 @@ echo "Running dart generate_config.dart with parameter: $mode"
 dart $ROOT_DIRECTORY/scripts/generate_config.dart $mode
 
 pushd $ROOT_DIRECTORY/src/mahjong_icp_frontend
-    flutter build web --profile --dart-define=Dart2jsOptimization=O0 --source-maps
+    if [ "$mode" == "mainnet" ]
+    then
+        flutter build web --release
+    else
+        flutter build web --profile --dart-define=Dart2jsOptimization=O0 --source-maps
+    fi
+
     sed -i 's|<base href="/ED-Mahjong/">|<base href="">|g' build/web/index.html
 popd
 dfx build || true
