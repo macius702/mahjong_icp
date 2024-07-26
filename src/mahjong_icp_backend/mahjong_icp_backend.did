@@ -1,7 +1,7 @@
 type Leaderboard = record { scores : vec record { nat32; text } };
 service : {
   debug_delete_all_data : () -> ();
-  get_times : () -> (vec record { text; nat32 }) query;
-  get_times_by_board : (text) -> (Leaderboard) query;
-  set_time : (text, nat32, text) -> ();
+  get_best_scores_for_all_boards : () -> (vec record { text; nat32 }) query;
+  get_scores_by_board : (text) -> (Leaderboard) query;
+  set_score : (text, nat32, text) -> ();
 }

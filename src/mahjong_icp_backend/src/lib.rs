@@ -34,51 +34,51 @@ pub struct Score {
 }
 
 #[ic_cdk_macros::query]
-pub fn get_times_by_board(board_layout: String) -> Leaderboard {
+pub fn get_scores_by_board(board_layout: String) -> Leaderboard {
     ic_cdk::println!(
-        "get_times_by_board: Function called with board_layout: {}",
+        "get_scores_by_board: Function called with board_layout: {}",
         board_layout
     );
 
     let mut result = Leaderboard::default();
     STATE.with(|state| {
         let state = state.borrow();
-        ic_cdk::println!("get_times_by_board: State borrowed");
+        ic_cdk::println!("get_scores_by_board: State borrowed");
         if let Some(leaderboard) = state.leaderboards.get(&board_layout) {
             ic_cdk::println!(
-                "get_times_by_board: Found leaderboard for board_layout: {}",
+                "get_scores_by_board: Found leaderboard for board_layout: {}",
                 board_layout
             );
             result = leaderboard.clone();
         }
     });
 
-    ic_cdk::println!("get_times_by_board: Function done returning {:?}", result);
+    ic_cdk::println!("get_scores_by_board: Function done returning {:?}", result);
 
     result
 }
 
 #[ic_cdk_macros::query]
-pub fn get_times() -> HashMap<String, u32> {
-    ic_cdk::println!("get_times: Function called");
+pub fn get_best_scores_for_all_boards() -> HashMap<String, u32> {
+    ic_cdk::println!("get_best_scores_for_all_boards: Function called");
 
     let mut result = HashMap::new();
     STATE.with(|state| {
         let state = state.borrow();
         for (board_layout, leaderboard) in state.leaderboards.iter() {
             ic_cdk::println!(
-                "get_times: Iterating over leaderboards with board_layout: {}",
+                "get_best_scores_for_all_boards: Iterating over leaderboards with board_layout: {}",
                 board_layout
             );
             if let Some((&miliseconds, _)) = leaderboard.scores.iter().next() {
                 ic_cdk::println!(
-                    "get_times: Found score for board_layout: {}, miliseconds: {}",
+                    "get_best_scores_for_all_boards: Found score for board_layout: {}, miliseconds: {}",
                     board_layout,
                     miliseconds
                 );
                 result.insert(board_layout.clone(), miliseconds);
             }
-            ic_cdk::println!("get_times: Iteration done");
+            ic_cdk::println!("get_best_scores_for_all_boards: Iteration done");
         }
     });
 
@@ -92,15 +92,18 @@ pub fn get_times() -> HashMap<String, u32> {
         }
     });
 
-    ic_cdk::println!("get_times: Function done returning {:?}", result);
+    ic_cdk::println!(
+        "get_best_scores_for_all_boards: Function done returning {:?}",
+        result
+    );
 
     result
 }
 
 #[ic_cdk_macros::update]
-pub fn set_time(board_layout: String, miliseconds: u32, user: String) {
+pub fn set_score(board_layout: String, miliseconds: u32, user: String) {
     ic_cdk::println!(
-        "set_time: Function called with board_layout: {}, miliseconds: {}, user: {}",
+        "set_score: Function called with board_layout: {}, miliseconds: {}, user: {}",
         board_layout,
         miliseconds,
         user
@@ -108,18 +111,18 @@ pub fn set_time(board_layout: String, miliseconds: u32, user: String) {
 
     STATE.with(|state| {
         let mut state = state.borrow_mut();
-        ic_cdk::println!("set_time: State borrowed");
+        ic_cdk::println!("set_score: State borrowed");
         let leaderboard = state
             .leaderboards
             .entry(board_layout)
             .or_insert(Leaderboard {
                 scores: BTreeMap::new(),
             });
-        ic_cdk::println!("set_time: Leaderboard entry created");
+        ic_cdk::println!("set_score: Leaderboard entry created");
 
         // Insert the score into the map
         leaderboard.scores.insert(miliseconds, user.clone());
-        ic_cdk::println!("set_time: Score inserted");
+        ic_cdk::println!("set_score: Score inserted");
     })
 }
 #[ic_cdk_macros::update]
