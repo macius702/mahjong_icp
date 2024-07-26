@@ -9,6 +9,8 @@ use candid::CandidType;
 
 use serde::Deserialize;
 
+const MAX_LEADERBOARD_ENTRIES: usize = 10;
+
 thread_local! {
     static STATE: RefCell<State> = RefCell::new(State::default());
 }
@@ -122,8 +124,13 @@ pub fn set_score(board_layout: String, miliseconds: u32, user: String) {
 
         // Insert the score into the map
         leaderboard.scores.insert(miliseconds, user.clone());
+
+        if leaderboard.scores.len() > MAX_LEADERBOARD_ENTRIES {
+            let last_key = *leaderboard.scores.keys().rev().next().unwrap();
+            leaderboard.scores.remove(&last_key);
+        }
         ic_cdk::println!("set_score: Score inserted");
-    })
+    });
 }
 #[ic_cdk_macros::update]
 pub fn debug_delete_all_data() {
