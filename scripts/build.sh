@@ -71,6 +71,7 @@ pushd $ROOT_DIRECTORY/src/mahjong_icp_frontend
         flutter build web --profile --dart-define=Dart2jsOptimization=O0 --source-maps
     fi
 
+    # ugly way to change base href
     sed -i 's|<base href="/ED-Mahjong/">|<base href="">|g' build/web/index.html
 popd
 dfx build || true
