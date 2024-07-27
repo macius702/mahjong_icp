@@ -144,17 +144,6 @@ pub fn set_score(board_layout: String, miliseconds: u32, user: String) {
 
     ic_cdk::println!("set_score: Function done");
 }
-//#[ic_cdk_macros::update]
-pub fn debug_delete_all_data() {
-    ic_cdk::println!("debug_delete_all_data: Function called");
-
-    STATE.with(|state| {
-        let mut state = state.borrow_mut();
-        ic_cdk::println!("debug_delete_all_data: State borrowed");
-        state.leaderboards.clear();
-        ic_cdk::println!("debug_delete_all_data: State cleared");
-    })
-}
 
 // Unit tests
 
@@ -188,22 +177,6 @@ mod tests {
             assert_eq!(leaderboard.scores.len(), 1);
             assert_eq!(leaderboard.scores[0].miliseconds, miliseconds);
             assert_eq!(leaderboard.scores[0].user, user);
-        });
-    }
-
-    #[test]
-    fn test_debug_delete_all_data() {
-        let board_layout = "test_layout".to_string();
-        let miliseconds = 100;
-        let user = "test_user".to_string();
-
-        set_score(board_layout.clone(), miliseconds, user.clone());
-
-        debug_delete_all_data();
-
-        STATE.with(|state| {
-            let state = state.borrow();
-            assert!(state.leaderboards.is_empty());
         });
     }
 
