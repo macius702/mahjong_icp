@@ -5,7 +5,15 @@
 # 3. mainnet: Deploys to the mainnet. This is the production environment and consumes cycles.
 
 
-export ROOT_DIRECTORY=~/mydes2/mahjong/mahjong_icp
+export ROOT_DIRECTORY=$(pwd)
+
+# Check if dfx.json is located in the current directory
+if [ -f "$ROOT_DIRECTORY/dfx.json" ]; then
+    echo "dfx.json found."
+else 
+    echo "Error: dfx.json not found in the root directory."
+    exit 1
+fi
 
 set -e
 
@@ -64,6 +72,8 @@ echo "Running dart generate_config.dart with parameter: $mode"
 dart $ROOT_DIRECTORY/scripts/generate_config.dart $mode
 
 pushd $ROOT_DIRECTORY/src/mahjong_icp_frontend
+    dart run ./scripts/convert_tileset.dart
+
     if [ "$mode" == "mainnet" ]
     then
         flutter build web --release
