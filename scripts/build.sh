@@ -72,6 +72,7 @@ echo "Running dart generate_config.dart with parameter: $mode"
 dart $ROOT_DIRECTORY/scripts/generate_config.dart $mode
 
 pushd $ROOT_DIRECTORY/src/mahjong_icp_frontend
+    dart pub get
     dart run ./scripts/convert_tileset.dart
 
     if [ "$mode" == "mainnet" ]
