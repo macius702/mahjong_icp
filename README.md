@@ -4,7 +4,7 @@ This project was created for the Internet Computer RUSH Bootcamp. The main focus
 
 ## Why Mahjong?
 
-The motivation behind choosing Mahjong was the lack of its implementation in the ICP ecosystem. A mature, GNU licensed implementation in Dart/Flutter was found and utilized.
+The motivation behind choosing Mahjong was the lack of its implementation in the ICP ecosystem. A pretty mature, MIT licensed implementation in Dart/Flutter was found and utilized.
 
 ## Why Flutter?
 
@@ -18,3 +18,13 @@ Flutter allows for the development of native applications for Android, iOS, Web,
 ## Live Demo
 
 You can check out the live demo of the project [here](https://h6wxg-niaaa-aaaam-ac4dq-cai.icp0.io/).
+
+## To build
+
+```
+git clone git@github.com:macius702/mahjong_icp.git
+cd mahjong_icp
+git submodule update --init --recursive
+scripts/build.sh
+scripts/build.sh mainnet
+```
