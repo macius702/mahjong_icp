@@ -4,10 +4,6 @@ import 'dart:convert';
 // read environment variable ROOT_DIRECTORY
 final ROOT_DIRECTORY = Platform.environment['ROOT_DIRECTORY'];
 
-
-
-
-
 void main(List<String> args) async {
   if (args.length != 1) {
     print('You must pass exactly one argument.');
@@ -33,7 +29,8 @@ void main(List<String> args) async {
         'dfx', ['canister', 'id', 'mahjong_icp_backend', '--network=ic']);
     var frontendResult = await Process.run(
         'dfx', ['canister', 'id', 'mahjong_icp_frontend', '--network=ic']);
-    await writeConfigFiles(frontendResult.stdout.trim(), backendResult.stdout.trim(), mode);
+    await writeConfigFiles(
+        frontendResult.stdout.trim(), backendResult.stdout.trim(), mode);
   } else if (await file.exists()) {
     print('File $file exists.');
 
@@ -57,7 +54,6 @@ void main(List<String> args) async {
   }
 }
 
-//mtlk todo - async below ?
 Future<void> writeConfigFiles(
     String frontend_canister_id, String backendCanisterId, String mode) async {
   var outputFile = File('$ROOT_DIRECTORY/web_front_end.sh');
