@@ -1,6 +1,6 @@
 # Project Description
 
-This project was created for the Internet Computer RUSH Bootcamp. The main focus of this project is on integration rather than innovation. The frontend of the Mahjong game is implemented in Dart/Flutter, while the backend is developed in Rust.
+This project was created for the Internet Computer RUSH Bootcamp. The primary emphasis of this project lies in achieving effective integration. The frontend of the Mahjong game is implemented in Dart/Flutter, while the backend is developed in Rust.
 
 ## Why Mahjong?
 
