@@ -19,6 +19,10 @@ Flutter allows for the development of native applications for Android, iOS, Web,
 
 You can check out the live demo of the project [here](https://h6wxg-niaaa-aaaam-ac4dq-cai.icp0.io/).
 
+For Android users, an APK file is available for download. Please note that this file is hosted on an external server, and as such, you should only download and install it if you trust the source. 
+
+[Download APK](https://h6wxg-niaaa-aaaam-ac4dq-cai.icp0.io/assets/build/app/outputs/flutter-apk/app-debug.apk)
+
 ## To build
 
 ```
@@ -28,3 +32,4 @@ git submodule update --init --recursive
 scripts/build.sh
 scripts/build.sh mainnet
 ```
+
