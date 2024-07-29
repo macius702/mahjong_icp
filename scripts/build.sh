@@ -75,6 +75,9 @@ pushd $ROOT_DIRECTORY/src/mahjong_icp_frontend
     dart pub get
     dart run ./scripts/convert_tileset.dart
 
+    flutter build apk --debug
+
+
     if [ "$mode" == "mainnet" ]
     then
         flutter build web --release
