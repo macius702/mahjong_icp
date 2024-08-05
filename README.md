@@ -33,3 +33,9 @@ scripts/build.sh
 scripts/build.sh mainnet
 ```
 
+## Check how many cycles are left in frontend
+
+```
+dfx canister status  mahjong_icp_frontend --network=ic
+```
+
